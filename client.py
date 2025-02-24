@@ -1,8 +1,9 @@
 import socket
 import threading
 
-HOST = '127.0.0.1'  # IP сервера
-PORT = 12345        # Порт сервера
+# Используйте IP-адрес вашего сервера на DigitalOcean
+HOST = '46.101.210.27'  # Замените на ваш публичный IP
+PORT = 12345            # Порт сервера
 
 def receive_messages(sock):
     """Получает и выводит сообщения от сервера"""

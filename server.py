@@ -2,8 +2,8 @@ import socket
 import threading
 
 # Настройки сервера
-HOST = '127.0.0.1'  # Локальный хост
-PORT = 12345        # Порт сервера
+HOST = '0.0.0.0'  # Будет слушать на всех интерфейсах, включая публичный IP
+PORT = 12345       # Порт сервера (убедитесь, что порт открыт в брандмауэре)
 
 # Список подключенных клиентов
 clients = []
@@ -25,6 +25,8 @@ def handle_client(client_socket):
             message = client_socket.recv(1024)
             if not message:
                 break
+
+            # Отправляем сообщение всем остальным клиентам
             broadcast(message, client_socket)
         except:
             break
