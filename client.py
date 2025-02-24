@@ -1,23 +1,23 @@
 import socket
 import threading
 
-# Используйте IP-адрес вашего сервера на DigitalOcean
-HOST = '46.101.210.27'  # Замените на ваш публичный IP
-PORT = 12345            # Порт сервера
+
+HOST = '46.101.210.27'  
+PORT = 12345           
 
 def receive_messages(sock):
-    """Получает и выводит сообщения от сервера"""
+    
     while True:
         try:
             message = sock.recv(1024).decode('utf-8')
             print(message)
         except:
-            print("Отключено от сервера")
+            print("Від'єднано від сервера")
             sock.close()
             break
 
 def start_client():
-    """Запускает клиент и подключается к серверу"""
+    
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client.connect((HOST, PORT))
 
