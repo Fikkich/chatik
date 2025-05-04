@@ -201,9 +201,17 @@ def handle_client(client_socket):
                     if login in users_db:
                         send_msg(client_socket, "Error: Користувач з таким логіном вже існує")
                     else:
-                        users_db[login] = {"Login": login, "Password": hash_password(password), "Chats": []}
+                        users_db[login] = {
+                        "Login": login,
+                        "Password": hash_password(password),
+                         "Chats": []
+                        }
                         save_user_to_db(users_db[login])
+        
+                        client_user_map[client_socket] = login
+        
                         send_msg(client_socket, "Реєстрація успішна")
+                        send_msg(client_socket, 'CHATS|[]')
 
                 elif parts[0] == "2":
                     login = parts[1]
@@ -248,6 +256,19 @@ def handle_client(client_socket):
                     image_base64 = parts[2]
                     send_private_image(image_base64, client_socket, recipient_login)
 
+                elif parts[0] == "7":
+                    login = client_user_map.get(client_socket)
+                    if login:
+                        user_chats = users_db[login]["Chats"]
+                        online_friends = []
+                        for chat in user_chats:
+                            friend = chat["userChatName"]
+                            if friend in client_user_map.values() and friend != login:
+                                online_friends.append(friend)
+
+                                send_msg(client_socket, f'FRIENDSONLINE|{json.dumps(online_friends)}')
+                            else:
+                                send_msg(client_socket, "Error: Користувач не авторизований")
                 else:
                     broadcast(message.encode('utf-8'), client_socket)
 
